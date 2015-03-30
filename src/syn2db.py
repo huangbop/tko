@@ -3,7 +3,7 @@ import subprocess as sp
 import collections
 
 def stage_server_lines():
-    sp.call('git add ../server')
+    sp.call('git add ../server/product')
     lines = sp.getoutput('git checkout |grep server')
     return lines
 
