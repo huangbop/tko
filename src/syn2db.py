@@ -8,11 +8,14 @@ def stage_server_lines():
     return lines
 
 def parse_lines():
-    """Return a defaultdict
+    """Return a changes defaultdict
     """
     lines = stage_server_lines().split(sep='\n')
+    import pdb; pdb.set_trace()
     changes = collections.defaultdict(list)
     for line in lines:
+        if line == '':
+            continue
         l = line.split('\t')
         changes[l[0]].append(l[1])
     return changes
