@@ -27,12 +27,20 @@ def dispatch_action():
     adds = changed_json_files.get('A')
     if adds:
         do_adds(adds)
+    import pdb; pdb.set_trace()
+    if not changed_json_files == {}:
+        do_commit(changed_json_files)
 
 def do_adds(adds):
     for add_file in adds:
         import pdb; pdb.set_trace()
-        info = open('../%s' % add_file, 'rb').read()
+        file_name = add_file[add_file.rindex('/') + 1 : -5]
+        info = json.load(open('../%s' % add_file))
+        info['name'] = file_name
         rest.add_record('product', info)
+
+def do_commit(files):
+    sp.call('git commit -m "******** %s"' % str(files))
 
 
 if __name__ == '__main__':
