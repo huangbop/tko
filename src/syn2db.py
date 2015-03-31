@@ -1,34 +1,39 @@
-
 import subprocess as sp
 import collections
 
-def stage_server_lines():
-    sp.call('git add ../server/product')
-    lines = sp.getoutput('git checkout |grep server')
-    return lines
+import rest
+import json
 
-def parse_lines():
-    """Return a changes defaultdict
+
+def product_checkout_useful_string():
+    sp.call('git add ../server/product')
+    useful_string = sp.getoutput("git checkout |grep 'product/.*.json'").encode('gbk').decode()
+    return useful_string
+
+def parse_useful_string():
+    """Return a changed defaultdict
     """
-    lines = stage_server_lines().split(sep='\n')
-    import pdb; pdb.set_trace()
-    changes = collections.defaultdict(list)
-    for line in lines:
+    useful_lines = product_checkout_useful_string().split(sep='\n')
+    changed_json_files = collections.defaultdict(list)
+    for line in useful_lines:
         if line == '':
             continue
-        l = line.split('\t')
-        changes[l[0]].append(l[1])
-    return changes
+        pairs = line.split('\t')
+        changed_json_files[pairs[0]].append(pairs[1])
+    return changed_json_files
 
 def dispatch_action():
-    changes = parse_lines()
-    adds = changes.get('A')
+    changed_json_files = parse_useful_string()
+    adds = changed_json_files.get('A')
     if adds:
         do_adds(adds)
 
 def do_adds(adds):
-    print(adds)
+    for add_file in adds:
+        import pdb; pdb.set_trace()
+        info = open('../%s' % add_file, 'rb').read()
+        rest.add_record('product', info)
 
-    
+
 if __name__ == '__main__':
     dispatch_action()
