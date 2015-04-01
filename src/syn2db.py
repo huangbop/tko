@@ -7,7 +7,7 @@ import json
 
 def product_checkout_useful_string():
     sp.call('git add ../server/product')
-    useful_string = sp.getoutput("git checkout |grep 'product/.*.json'").encode('gbk').decode()
+    products = sp.getoutput("git checkout |grep 'product/.*.json'").encode('gbk').decode()
     return useful_string
 
 def parse_useful_string():
