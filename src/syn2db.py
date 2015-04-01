@@ -32,9 +32,43 @@ def dispatch_action():
     adds = changed_files.get('A')
     if adds:
         do_adds(adds)
+    modify = changed_files.get('M')
+    if modify:
+        do_modify(modify)
     import pdb; pdb.set_trace()
     if not changed_files == {}:
         do_commit(changed_files)
+
+
+def modify_image(modify_file):
+    """*
+    """
+    file_name = modify_file[modify_file.rindex('/') + 1:]
+    file_type = modify_file[modify_file.rindex('.') + 1:]
+    file_bin = open('../server/images/' + file_name, 'rb')
+    info = {'name': file_name, 'type': file_type, 'bin': file_bin}
+    rest.modify_image(info)
+
+
+def modify_json(modify_file):
+    """*
+    """
+    import pdb; pdb.set_trace()
+    file_name = modify_file[modify_file.rindex('/') + 1: -5]
+    info = json.load(open('../%s' % modify_file))
+    info['name'] = file_name
+    rest.modify_product(info)
+
+
+def do_modify(modify):
+    """*
+    """
+    for modify_file in modify:
+        import pdb; pdb.set_trace()
+        if modify_file.find('images') != -1:
+            modify_image(modify_file)
+        elif modify_file.find('products') != -1:
+            modify_json(modify_file)
 
 
 def add_image(add_file):
@@ -72,7 +106,8 @@ def do_commit(files):
     """*
     """
     import pdb; pdb.set_trace()
-    sp.call('git commit -m "**** %s"' % str(files))
+    #sp.call('git commit -m "**** %s"' % str(files))
+    pass
 
 
 

@@ -3,6 +3,11 @@
 import requests
 import json
 
+RAW_HEADERS = {
+    "X-Bmob-Application-Id": "e9c72808f8555c8d7846a13a50e907a6",
+    "X-Bmob-REST-API-Key": "9632a84d440c4faa818f033355cb9bf3",
+}
+
 JSON_HEADERS = {
     "X-Bmob-Application-Id": "e9c72808f8555c8d7846a13a50e907a6",
     "X-Bmob-REST-API-Key": "9632a84d440c4faa818f033355cb9bf3",
@@ -41,14 +46,37 @@ def add_image(info):
         file_desc['__type'] = "File"
         info['file'] = file_desc
         del info['bin']
-        res = requests.post('%s%s' % (CLASSES_BASE_URL, 'images'), headers=JSON_HEADERS,
-                            data=json.dumps(info))
+        res = requests.post('%s%s' % (CLASSES_BASE_URL, 'images'),
+                            headers=JSON_HEADERS, data=json.dumps(info))
         print(res)
 
 
 def add_product(info):
     """*
     """
-    res = requests.post('%s%s' % (CLASSES_BASE_URL, 'products'), headers=JSON_HEADERS,
-                        data=json.dumps(info))
+    res = requests.post('%s%s' % (CLASSES_BASE_URL, 'products'),
+                        headers=JSON_HEADERS, data=json.dumps(info))
     print(res)
+
+
+def modify_image(info):
+    """*
+    """
+    pass
+    
+
+def modify_product(info):
+    """*
+    """
+    import pdb; pdb.set_trace()
+    # get objectid
+    res = requests.get(CLASSES_BASE_URL + 'products', headers=RAW_HEADERS,
+                       data="where={'name': '%s'}" % info['name'])
+    if res.status_code == 200:
+        record = json.loads(res.content.decode())
+        objectid = record['results'][0]['objectId']
+        # modify special record
+        del info['name']
+        res = requests.put('%sproducts/%s' % (CLASSES_BASE_URL, objectid),
+                           headers=JSON_HEADERS, data=json.dumps(info))
+        print(res)
