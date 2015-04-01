@@ -1,7 +1,0 @@
-A	server/images/卡布奇诺.jpg
-A	server/images/美式咖啡.jpg
-A	server/products/卡布奇诺.json
-A	server/products/美式咖啡.json
-M	src/rest.py
-M	src/syn2db.py
-Your branch is ahead of 'origin/master' by 1 commit.

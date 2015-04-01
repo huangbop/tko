@@ -10,8 +10,7 @@ import json
 def product_checkout_useful_string():
     import pdb; pdb.set_trace()
     sp.call('git add ../server/')
-    useful_string = sp.getoutput("git checkout").encode('utf16')
-    # |grep 'server/.*.[jpg|png|json]'")
+    useful_string = sp.getoutput("git checkout |grep 'server/'")
     return useful_string
 
 
@@ -19,23 +18,23 @@ def parse_useful_string():
     """Return a changed defaultdict
     """
     useful_lines = product_checkout_useful_string().split(sep='\n')
-    changed_json_files = collections.defaultdict(list)
+    changed_files = collections.defaultdict(list)
     for line in useful_lines:
         if line == '':
             continue
         pairs = line.split('\t')
-        changed_json_files[pairs[0]].append(pairs[1])
-    return changed_json_files
+        changed_files[pairs[0]].append(pairs[1])
+    return changed_files
 
 
 def dispatch_action():
-    changed_json_files = parse_useful_string()
-    adds = changed_json_files.get('A')
+    changed_files = parse_useful_string()
+    adds = changed_files.get('A')
     if adds:
         do_adds(adds)
     import pdb; pdb.set_trace()
-    if not changed_json_files == {}:
-        do_commit(changed_json_files)
+    if not changed_files == {}:
+        do_commit(changed_files)
 
 
 def add_image(add_file):
@@ -51,8 +50,9 @@ def add_image(add_file):
 def add_json(add_file):
     """*
     """
+    import pdb; pdb.set_trace()
     file_name = add_file[add_file.rindex('/') + 1: -5]
-    info = json.load(open('../products/%s' % add_file))
+    info = json.load(open('../%s' % add_file))
     info['name'] = file_name
     rest.add_product(info)
 
@@ -71,8 +71,9 @@ def do_adds(adds):
 def do_commit(files):
     """*
     """
-    # sp.call('git commit -m "******** %s"' % str(files))
-    pass
+    import pdb; pdb.set_trace()
+    sp.call('git commit -m "**** %s"' % str(files))
+
 
 
 if __name__ == '__main__':
