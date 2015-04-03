@@ -106,7 +106,7 @@ def do_commit(files):
     """*
     """
     import pdb; pdb.set_trace()
-    #sp.call('git commit -m "**** %s"' % str(files))
+    sp.call('git commit -m "**** %s"' % str(files))
     pass
 
 

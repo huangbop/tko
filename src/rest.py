@@ -62,8 +62,30 @@ def add_product(info):
 def modify_image(info):
     """*
     """
-    pass
-    
+    # get objectid
+    import pdb; pdb.set_trace()
+    params = 'where={"name": "%s"}' % info['name']
+    res = requests.get(CLASSES_BASE_URL + 'images', headers=RAW_HEADERS,
+                       params=params)
+    if res.status_code == 200:
+        record = json.loads(res.content.decode())
+        objectid = record['results'][0]['objectId']
+        # load file first
+        image_headers = JPG_HEADERS
+        if info['type'] == 'png':
+            image_headers = PNG_HEADERS
+        res = requests.post(FILES_BASE_URL + info['name'],
+                            headers=image_headers, data=info['bin'])
+        if res.status_code == 201:
+            file_desc = json.loads(res.content.decode())
+            file_desc['__type'] = "File"
+            info['file'] = file_desc
+            del info['bin']
+            del info['name']
+            res = requests.put('%simages/%s' % (CLASSES_BASE_URL, objectid),
+                               headers=JSON_HEADERS, data=json.dumps(info))
+            print(res)
+
 
 def modify_product(info):
     """*
