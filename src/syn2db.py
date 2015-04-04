@@ -10,7 +10,7 @@ import json
 def product_checkout_useful_string():
     import pdb; pdb.set_trace()
     sp.call('git add ../server/')
-    useful_string = sp.getoutput("git checkout |grep 'server/'")
+    useful_string = sp.getoutput("git checkout |grep 'server/' |iconv -f UTF-8")
     return useful_string
 
 
