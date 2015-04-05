@@ -121,7 +121,7 @@ def delete_image(info):
         # delete record
         res = requests.delete('%simages/%s' % (CLASSES_BASE_URL, objectid),
                               headers=RAW_HEADERS)
-        if res == 200:
+        if res.status_code == 200:
             print('Delete %s OK.' % info['name'])
         else:
             print('Delete %s failed.' % info['name'])
@@ -145,7 +145,7 @@ def delete_product(info):
         # delete record
         res = requests.delete('%sproducts/%s' % (CLASSES_BASE_URL, objectid),
                               headers=RAW_HEADERS)
-        if res == 200:
+        if res.status_code == 200:
             print('Delete %s OK.' % info['name'])
         else:
             print('Delete %s failed.' % info['name'])
