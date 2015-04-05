@@ -35,10 +35,40 @@ def dispatch_action():
     modify = changed_files.get('M')
     if modify:
         do_modify(modify)
+    delete = changed_files.get('D')
+    if delete:
+        do_delete(delete)
     import pdb; pdb.set_trace()
     if not changed_files == {}:
         do_commit(changed_files)
 
+
+def delete_image(delete_file):
+    """*
+    """
+    file_name = delete_file[delete_file.rindex('/') + 1:]
+    info = {'name': file_name}
+    rest.delete_image(info)
+
+
+def delete_json(delete_file):
+    """*
+    """
+    import pdb; pdb.set_trace()
+    file_name = delete_file[delete_file.rindex('/') + 1: -5]
+    info = {'name': file_name}
+    rest.delete_product(info)
+
+
+def do_delete(delete):
+    """*
+    """
+    for delete_file in delete:
+        import pdb; pdb.set_trace()
+        if delete_file.find('images') != -1:
+            delete_image(delete_file)
+        elif delete_file.find('products') != -1:
+            delete_json(delete_file)
 
 def modify_image(modify_file):
     """*
@@ -108,7 +138,6 @@ def do_commit(files):
     import pdb; pdb.set_trace()
     sp.call('git commit -m "**** %s"' % str(files))
     pass
-
 
 
 if __name__ == '__main__':

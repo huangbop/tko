@@ -102,3 +102,53 @@ def modify_product(info):
         res = requests.put('%sproducts/%s' % (CLASSES_BASE_URL, objectid),
                            headers=JSON_HEADERS, data=json.dumps(info))
         print(res)
+
+def delete_image(info):
+    """*
+    """
+    # get objectid
+    import pdb; pdb.set_trace()
+    params = 'where={"name": "%s"}' % info['name']
+    res = requests.get(CLASSES_BASE_URL + 'images', headers=RAW_HEADERS,
+                       params=params)
+    if res.status_code == 200:
+        record = json.loads(res.content.decode())
+        try:
+            objectid = record['results'][0]['objectId']
+        except:
+            print('No objectid found with %s' % info['name'])
+            return
+        # delete record
+        res = requests.delete('%simages/%s' % (CLASSES_BASE_URL, objectid),
+                              headers=RAW_HEADERS)
+        if res == 200:
+            print('Delete %s OK.' % info['name'])
+        else:
+            print('Delete %s failed.' % info['name'])
+
+
+def delete_product(info):
+    """*
+    """
+    # get objectid
+    import pdb; pdb.set_trace()
+    params = 'where={"name": "%s"}' % info['name']
+    res = requests.get(CLASSES_BASE_URL + 'products', headers=RAW_HEADERS,
+                       params=params)
+    if res.status_code == 200:
+        record = json.loads(res.content.decode())
+        try:
+            objectid = record['results'][0]['objectId']
+        except:
+            print('No objectid found with %s' % info['name'])
+            return
+        # delete record
+        res = requests.delete('%sproducts/%s' % (CLASSES_BASE_URL, objectid),
+                              headers=RAW_HEADERS)
+        if res == 200:
+            print('Delete %s OK.' % info['name'])
+        else:
+            print('Delete %s failed.' % info['name'])
+
+    else:
+        print('Get objectid of %s failed.' % info['name'])
